@@ -111,7 +111,7 @@ export default function PuzzleGame() {
           <SelectTrigger className="w-[120px] bg-white text-black">
             <SelectValue placeholder="Ukuran" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent position="popper">
             {[3, 4, 5, 6, 7, 8, 9, 10].map((val) => (
               <SelectItem key={val} value={val.toString()}>
                 {val}x{val}
