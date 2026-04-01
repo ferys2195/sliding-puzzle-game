@@ -1,8 +1,15 @@
+@import url("https://fonts.googleapis.com/css2?family=Frijole&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 @plugin "tailwindcss-animated";
+
+@utility font-frijole {
+  font-family: "Frijole", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
