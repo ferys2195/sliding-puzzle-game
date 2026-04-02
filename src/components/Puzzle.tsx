@@ -108,34 +108,21 @@ export default function PuzzleGame() {
   };
 
   return (
-    <div className="mx-auto max-w-7xl">
-      {/* Header */}
-      <motion.div
-        initial={{ y: -50, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        className="mb-8 text-center"
-      >
-        <h1 className="mb-2 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text font-frijole text-4xl font-bold text-transparent sm:text-5xl">
-          SLIDING PUZZLE
-        </h1>
-      </motion.div>
-
-      {/* Stats Panel */}
-      <Panel
-        moveCount={moveCount}
-        elapsedTime={elapsedTime}
-        bestScore={bestScore}
-        size={size}
-        setSize={setSize}
-        resetGame={resetGame}
-      />
-      {/* Game Board */}
+    <div>
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.2 }}
       >
-        <div className="mx-auto aspect-square w-full touch-none overflow-hidden rounded-2xl bg-white/10 p-4 shadow backdrop-blur-lg sm:w-1/3 xl:w-2/5">
+        <div className="mx-auto w-full touch-none overflow-hidden sm:w-1/3 sm:p-2 xl:w-2/5">
+          <Panel
+            moveCount={moveCount}
+            elapsedTime={elapsedTime}
+            bestScore={bestScore}
+            size={size}
+            setSize={setSize}
+            resetGame={resetGame}
+          />
           <Board tiles={tiles} onTileClick={handleTileClick} size={size} />
         </div>
       </motion.div>
