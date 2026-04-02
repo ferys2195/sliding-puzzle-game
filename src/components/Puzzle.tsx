@@ -3,25 +3,10 @@
 import { useCallback, useEffect, useState } from "react";
 import Board from "./Board";
 import { generateSolvablePuzzle, moveTile } from "../lib/puzzle";
-import { Button } from "./ui/button";
-import { Label } from "./ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
-import { RefreshCcw } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "./ui/dialog";
-import confetti from "canvas-confetti"; // 🚀 import confetti
+import confetti from "canvas-confetti";
+import { motion } from "framer-motion";
+import Panel from "./Panel";
+import VictoryModal from "./VictoryModal";
 
 function isSolved(tiles: (number | null)[]): boolean {
   const last = tiles.length - 1;
@@ -39,6 +24,18 @@ export default function PuzzleGame() {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [showWinModal, setShowWinModal] = useState(false);
   const [isGameWon, setIsGameWon] = useState(false);
+  const [bestScore, setBestScore] = useState<{
+    moves: number;
+    time: number;
+  } | null>(null);
+
+  // Load best score from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem(`bestScore_${size}`);
+    if (saved) {
+      setBestScore(JSON.parse(saved));
+    }
+  }, [size]);
 
   const resetGame = useCallback(() => {
     setTiles(generateSolvablePuzzle(size));
@@ -67,6 +64,14 @@ export default function PuzzleGame() {
       particleCount: 300,
       spread: 100,
       origin: { y: 0.6 },
+      colors: [
+        "#ff0000",
+        "#00ff00",
+        "#0000ff",
+        "#ffff00",
+        "#ff00ff",
+        "#00ffff",
+      ],
     });
   };
 
@@ -83,76 +88,54 @@ export default function PuzzleGame() {
       if (isSolved(newTiles)) {
         setIsGameWon(true);
         setShowWinModal(true);
-        fireConfetti(); // 🎉 Tambahkan efek confetti saat menang
+        fireConfetti();
+
+        // Update best score
+        const currentScore = { moves: newMoveCount, time: elapsedTime + 1 };
+        if (
+          !bestScore ||
+          newMoveCount < bestScore.moves ||
+          (newMoveCount === bestScore.moves && elapsedTime + 1 < bestScore.time)
+        ) {
+          setBestScore(currentScore);
+          localStorage.setItem(
+            `bestScore_${size}`,
+            JSON.stringify(currentScore),
+          );
+        }
       }
     }
   };
 
-  const formatTime = (seconds: number) => {
-    const m = Math.floor(seconds / 60)
-      .toString()
-      .padStart(2, "0");
-    const s = (seconds % 60).toString().padStart(2, "0");
-    return `${m}:${s}`;
-  };
-
   return (
-    <div className="flex max-w-screen flex-col items-center justify-center space-y-4 p-4">
-      <div className="text-sm text-gray-700">
-        Langkah: {moveCount} | Waktu: {formatTime(elapsedTime)}
-      </div>
+    <div>
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: 0.2 }}
+      >
+        <div className="mx-auto w-full touch-none overflow-hidden sm:w-1/3 sm:p-2 xl:w-2/5">
+          <Panel
+            moveCount={moveCount}
+            elapsedTime={elapsedTime}
+            bestScore={bestScore}
+            size={size}
+            setSize={setSize}
+            resetGame={resetGame}
+          />
+          <Board tiles={tiles} onTileClick={handleTileClick} size={size} />
+        </div>
+      </motion.div>
 
-      <div className="flex items-center gap-2">
-        <Label htmlFor="size">Pilih ukuran papan:</Label>
-        <Select
-          defaultValue={size.toString()}
-          onValueChange={(value) => setSize(parseInt(value))}
-        >
-          <SelectTrigger className="w-[120px] bg-white text-black">
-            <SelectValue placeholder="Ukuran" />
-          </SelectTrigger>
-          <SelectContent position="popper">
-            {[3, 4, 5, 6, 7, 8, 9, 10].map((val) => (
-              <SelectItem key={val} value={val.toString()}>
-                {val}x{val}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Button
-          onClick={resetGame}
-          size={"icon"}
-          variant={"default"}
-          className="hover:cursor-pointer"
-        >
-          <RefreshCcw />
-        </Button>
-      </div>
-
-      <div className="aspect-square w-full sm:w-1/3 xl:w-2/5">
-        <Board tiles={tiles} onTileClick={handleTileClick} size={size} />
-      </div>
-
-      <Dialog open={showWinModal}>
-        <DialogContent className="text-center [&>button.absolute]:hidden">
-          <DialogHeader>
-            <DialogTitle>🎉 Selamat, Kamu Menang!</DialogTitle>
-            <DialogDescription>
-              Puzzle diselesaikan dengan <strong>{moveCount}</strong> langkah
-              dalam waktu <strong>{formatTime(elapsedTime)}</strong>.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="mt-4">
-            <Button
-              onClick={() => {
-                resetGame();
-              }}
-            >
-              Tutup
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {/* Victory Modal */}
+      <VictoryModal
+        showWinModal={showWinModal}
+        setShowWinModal={setShowWinModal}
+        moveCount={moveCount}
+        elapsedTime={elapsedTime}
+        bestScore={bestScore}
+        resetGame={resetGame}
+      />
     </div>
   );
 }

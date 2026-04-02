@@ -1,20 +1,17 @@
+import Header from "@/components/Header";
 import Footer from "../components/Footer";
 import Puzzle from "../components/Puzzle";
 
 export default function IndexPage() {
   return (
-    <div className="flex h-screen flex-col overflow-hidden p-3">
+    <div className="flex size-full h-screen max-h-screen flex-col overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-3">
       <header className="p-3">
-        <div className="text-center">
-          <h1 className="mb-1 font-frijole text-2xl font-bold">
-            Sliding Puzzle Game
-          </h1>
-        </div>
+        <Header />
       </header>
-      <div className="container mx-auto flex-1">
+      <main className="container mx-auto max-w-7xl flex-1">
         <Puzzle />
-      </div>
-      <footer className="container mx-auto">
+      </main>
+      <footer>
         <Footer />
       </footer>
     </div>

@@ -3,10 +3,10 @@
 import { cn } from "../lib/utils";
 
 const getFontSize = (size: number) => {
-  if (size <= 3) return "text-4xl";
-  if (size <= 4) return "text-3xl";
-  if (size <= 5) return "text-2xl";
-  if (size <= 7) return "text-xl";
+  if (size <= 3) return "text-5xl";
+  if (size <= 4) return "text-4xl";
+  if (size <= 5) return "text-3xl";
+  if (size <= 7) return "text-2xl";
   return "text-lg";
 };
 
@@ -25,7 +25,7 @@ export default function Tile({
     <div
       onClick={onClick}
       className={cn(
-        "flex aspect-square cursor-pointer items-center justify-center rounded border border-gray-400 bg-gray-200 text-xl font-bold transition-all duration-200 ease-in-out select-none",
+        "flex aspect-square cursor-pointer items-center justify-center rounded-xl border border-gray-400 bg-gray-200 font-knewave transition-all duration-200 ease-in-out select-none",
         isEmpty && "cursor-default bg-transparent",
       )}
     >
