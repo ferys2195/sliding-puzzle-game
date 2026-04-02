@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Frijole&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Frijole&family=Knewave&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -8,6 +8,12 @@
 @utility font-frijole {
   font-family: "Frijole", system-ui;
   font-weight: 400;
+  font-style: normal;
+}
+
+@utility font-knewave {
+  font-family: "Knewave", system-ui;
+  font-weight: 100;
   font-style: normal;
 }
 
