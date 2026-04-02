@@ -13,7 +13,7 @@ export default function Board({
 }) {
   return (
     <div
-      className="grid h-full w-full gap-1"
+      className="grid h-full w-full gap-1 rounded-2xl bg-white/10 p-4 shadow backdrop-blur-lg"
       style={{ gridTemplateColumns: `repeat(${size}, 1fr)` }}
     >
       {tiles.map((tile, index) => (
