@@ -2,7 +2,7 @@
 
 Simple puzzle game build with react
 
-![Screenshot](/screenshots/Screenshot_1.jpeg)
+![Screenshot](/screenshots/screenshoot-v2.jpeg)
 
 ```
 npm install
